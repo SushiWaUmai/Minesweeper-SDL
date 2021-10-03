@@ -30,8 +30,6 @@ int main(int argc, char* args[]) {
 		return EXIT_FAILURE;
 	}
 
-	//SDL_Rect squreRect;
-
 	while (true) {
 		SDL_Event e;
 		SDL_WaitEvent(&e);
