@@ -2,7 +2,21 @@ cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
 
 project(Minesweeper)
 
-set(SRC "src/main.cpp" "src/tile.h" "src/tile.cpp" "src/log.h" "src/game.cpp" "src/game.h" "src/utils.h" "src/utils.cpp" "src/renderable.h" "src/renderable.cpp" "src/clickable.cpp" "src/clickable.h")
+set(SRC
+	"src/main.cpp"
+	"src/log.h"
+	"src/tile.h"
+	"src/tile.cpp"
+	"src/game.cpp"
+	"src/game.h"
+	"src/utils.h"
+	"src/utils.cpp"
+	"src/renderable.h"
+	"src/renderable.cpp"
+	"src/clickable.cpp"
+	"src/clickable.h"
+ "src/listable.cpp" "src/listable.h")
+
 add_executable(Minesweeper ${SRC})
 
 set_target_properties(Minesweeper PROPERTIES

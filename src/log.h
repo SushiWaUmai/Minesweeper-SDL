@@ -17,3 +17,12 @@
 
 #define LOG_ASSERT(check, msg)	{ if(!check) { LOG_ERROR("Assertion Failed: {0}", msg); DEBUG_BREAK(); } }
 
+#define LOG_LEVEL_TRACE spdlog::level::trace
+#define LOG_LEVEL_INFO spdlog::level::info
+#define LOG_LEVEL_DEBUG spdlog::level::debug
+#define LOG_LEVEL_WARNING spdlog::level::warn
+#define LOG_LEVEL_ERROR spdlog::level::err
+#define LOG_LEVEL_CRITICAL spdlog::level::critical
+
+#define LOG_SET_LEVEL(level) spdlog::set_level(level)
+

@@ -7,6 +7,8 @@ int main(int argc, char** args) {
 	(void)argc;
 	(void)args;
 
+	LOG_SET_LEVEL(LOG_LEVEL_TRACE);
+
 	Game game = Game();
 	game.StartGame();
 	game.StartUpdate();
