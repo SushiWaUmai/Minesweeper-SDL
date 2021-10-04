@@ -4,12 +4,6 @@
 #include "tile.h"
 #include "utils.h"
 
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
-
-#define GAME_WIDTH 8
-#define GAME_HEIGHT 8
-
 std::tuple<SDL_Window*, SDL_Renderer*> Minesweeper_StartGame() {
 	int sdlInitResult = SDL_Init(SDL_INIT_EVERYTHING);
 	LOG_ASSERT(!sdlInitResult , "Failed to create SDL Window");
@@ -27,22 +21,12 @@ std::tuple<SDL_Window*, SDL_Renderer*> Minesweeper_StartGame() {
 void Minesweeper_Update(SDL_Renderer* _renderer) {
 	SDL_Event e;
 
-	SDL_Texture* texture = LoadTexture("res/bomb.bmp", _renderer);
-
-	SDL_Rect dst;
-	dst.x = 0;
-	dst.y = 0;
-	dst.w = 500;
-	dst.h = 500;
-
 	SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
 
 	Tile tiles[GAME_WIDTH * GAME_HEIGHT];
 
 	for (int i = 0; i < GAME_WIDTH * GAME_HEIGHT; i++) {
-		if (i % 5 == 0) {
-			tiles[i].surroundedBombs = -1;
-		}
+		tiles[i] = Tile(i % GAME_WIDTH, i / GAME_WIDTH);
 	}
 
 	bool running = true;
@@ -60,8 +44,6 @@ void Minesweeper_Update(SDL_Renderer* _renderer) {
 		for (int i = 0; i < GAME_WIDTH * GAME_HEIGHT; i++) {
 			tiles[i].Render(_renderer);
 		}
-
-		SDL_RenderCopy(_renderer, texture, NULL, &dst);
 
 		SDL_RenderPresent(_renderer);
 	}

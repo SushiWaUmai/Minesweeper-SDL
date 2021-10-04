@@ -1,10 +1,12 @@
 #include "tile.h"
 #include "log.h"
 #include "utils.h"
+#include "game.h"
 #include <sstream>
 
 SDL_Texture* Tile::tileTextures[8];
 SDL_Texture* Tile::hiddenTexture;
+SDL_Texture* Tile::bombTexture;
 
 void Tile::Init(SDL_Renderer* _renderer)
 {
@@ -14,18 +16,26 @@ void Tile::Init(SDL_Renderer* _renderer)
 
 		tileTextures[i] = LoadTexture(ss.str().c_str(), _renderer);
 	}
+
+	hiddenTexture = LoadTexture("res/hidden.bmp", _renderer);
 }
 
-void Tile::Expose() {
-}
-
-void Tile::Flag() {
+Tile::Tile(int x, int y) {
+	dst.x = x * CELL_WIDTH;
+	dst.y = y * CELL_HEIGHT;
+	dst.w = CELL_WIDTH;
+	dst.h = CELL_HEIGHT;
 }
 
 void Tile::Render(SDL_Renderer* _renderer) {
 	if (isExposed) {
-		SDL_RenderCopy(_renderer, tileTextures[surroundedBombs], NULL, &dst);
+		if (surroundedBombs != -1) {
+			SDL_RenderCopy(_renderer, tileTextures[surroundedBombs], NULL, &dst);
+		}
+		else {
+		}
 	}
 	else {
+		SDL_RenderCopy(_renderer, hiddenTexture, NULL, &dst);
 	}
 }

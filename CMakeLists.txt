@@ -27,6 +27,11 @@ add_custom_command(TARGET Minesweeper POST_BUILD
 	"${CMAKE_CURRENT_SOURCE_DIR}/vendor/SDL2/lib/${ARCH}/SDL2.dll"
 	"${CMAKE_BINARY_DIR}/bin/Minesweeper-${CMAKE_BUILD_TYPE}/SDL2.dll")
 
+add_custom_command(TARGET Minesweeper POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E copy_directory
+	"${CMAKE_SOURCE_DIR}/res"
+	"${CMAKE_BINARY_DIR}/bin/Minesweeper-${CMAKE_BUILD_TYPE}/res")
+
 # spdlog
 add_subdirectory("vendor/spdlog")
 target_include_directories(Minesweeper PRIVATE "vendor/spdlog/include")
