@@ -4,24 +4,23 @@
 #include "tile.h"
 #include "utils.h"
 
-std::tuple<SDL_Window*, SDL_Renderer*> Minesweeper_StartGame() {
+void Game::StartGame() {
 	int sdlInitResult = SDL_Init(SDL_INIT_EVERYTHING);
-	LOG_ASSERT(!sdlInitResult , "Failed to create SDL Window");
+	LOG_ASSERT(!sdlInitResult, "Failed to create SDL Window");
 
-	SDL_Window* window = SDL_CreateWindow("Minesweeper", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+	window = SDL_CreateWindow("Minesweeper", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	LOG_ASSERT(window, "Failed to create SDL Window");
 
-	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 	LOG_ASSERT(renderer, "Failed to create SDL renderer");
 
 	Tile::Init(renderer);
-	return { window, renderer };
 }
 
-void Minesweeper_Update(SDL_Renderer* _renderer) {
+void Game::StartUpdate() {
 	SDL_Event e;
 
-	SDL_SetRenderDrawColor(_renderer, 0, 0, 0, 255);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 
 	Tile tiles[GAME_WIDTH * GAME_HEIGHT];
 
@@ -39,18 +38,18 @@ void Minesweeper_Update(SDL_Renderer* _renderer) {
 			}
 		}
 
-		SDL_RenderClear(_renderer);
+		SDL_RenderClear(renderer);
 
 		for (int i = 0; i < GAME_WIDTH * GAME_HEIGHT; i++) {
-			tiles[i].Render(_renderer);
+			tiles[i].Render(renderer);
 		}
 
-		SDL_RenderPresent(_renderer);
+		SDL_RenderPresent(renderer);
 	}
 }
 
-void Minesweeper_Terminate(SDL_Window* _window) {
+void Game::Terminate() {
 	LOG_INFO("Terminating Program...");
-	SDL_DestroyWindow(_window);
+	SDL_DestroyWindow(window);
 	SDL_Quit();
 }

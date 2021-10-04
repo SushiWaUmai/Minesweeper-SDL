@@ -11,6 +11,14 @@
 #define CELL_WIDTH SCREEN_WIDTH / GAME_WIDTH
 #define CELL_HEIGHT SCREEN_HEIGHT / GAME_HEIGHT
 
-std::tuple<SDL_Window*, SDL_Renderer*> Minesweeper_StartGame();
-void Minesweeper_Update(SDL_Renderer* _renderer);
-void Minesweeper_Terminate(SDL_Window* _window);
+class Game {
+public:
+	void StartGame();
+	void StartUpdate();
+	void Terminate();
+
+private:
+	void HandleEvents();
+	SDL_Renderer* renderer;
+	SDL_Window* window;
+};
