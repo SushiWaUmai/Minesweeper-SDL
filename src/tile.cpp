@@ -39,3 +39,12 @@ void Tile::Render(SDL_Renderer* _renderer) {
 		SDL_RenderCopy(_renderer, hiddenTexture, NULL, &dst);
 	}
 }
+
+void Tile::Handle(SDL_MouseButtonEvent _mouseEvent) {
+	if (_mouseEvent.button == SDL_BUTTON_LEFT) {
+		if (InRect(_mouseEvent.x, _mouseEvent.y, dst)) {
+			LOG_INFO("Tile Clicked: ({0}, {1})", dst.x / CELL_WIDTH, dst.y / CELL_HEIGHT);
+			Expose();
+		}
+	}
+}

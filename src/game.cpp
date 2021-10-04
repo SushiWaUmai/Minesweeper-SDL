@@ -3,6 +3,8 @@
 #include "log.h"
 #include "tile.h"
 #include "utils.h"
+#include "renderable.h"
+#include "clickable.h"
 
 void Game::StartGame() {
 	int sdlInitResult = SDL_Init(SDL_INIT_EVERYTHING);
@@ -15,36 +17,17 @@ void Game::StartGame() {
 	LOG_ASSERT(renderer, "Failed to create SDL renderer");
 
 	Tile::Init(renderer);
-}
-
-void Game::StartUpdate() {
-	SDL_Event e;
-
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-
-	Tile tiles[GAME_WIDTH * GAME_HEIGHT];
-
 	for (int i = 0; i < GAME_WIDTH * GAME_HEIGHT; i++) {
 		tiles[i] = Tile(i % GAME_WIDTH, i / GAME_WIDTH);
 	}
+}
 
-	bool running = true;
-	while (running) {
-		SDL_PollEvent(&e);
-		while (SDL_PollEvent(&e) != 0) {
-			switch (e.type) {
-			case SDL_QUIT:
-				running = false;
-			}
-		}
+void Game::StartUpdate() {
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 
-		SDL_RenderClear(renderer);
-
-		for (int i = 0; i < GAME_WIDTH * GAME_HEIGHT; i++) {
-			tiles[i].Render(renderer);
-		}
-
-		SDL_RenderPresent(renderer);
+	while (isRunning) {
+		HandleEvents();
+		Render();
 	}
 }
 
@@ -52,4 +35,21 @@ void Game::Terminate() {
 	LOG_INFO("Terminating Program...");
 	SDL_DestroyWindow(window);
 	SDL_Quit();
+}
+
+void Game::Render() {
+	SDL_RenderClear(renderer);
+	Renderable::RenderAll(renderer);
+	SDL_RenderPresent(renderer);
+}
+
+void Game::HandleEvents() {
+	while (SDL_PollEvent(&e) != 0) {
+		switch (e.type) {
+		case SDL_QUIT:
+			isRunning = false;
+		case SDL_MOUSEBUTTONDOWN:
+			Clickable::HandleAll(e.button);
+		}
+	}
 }
