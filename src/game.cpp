@@ -25,6 +25,15 @@ void Game::StartGame() {
 	for (int i = 0; i < GAME_WIDTH * GAME_HEIGHT; i++) {
 		tiles[i] = Tile(i % GAME_WIDTH, i / GAME_WIDTH);
 	}
+
+	srand(time(NULL));
+	for(int i = 0, j = 0; i < 10; j++) {
+		float val = ((float)rand() / (RAND_MAX));
+		if (val < 0.5) {
+			tiles[j % (GAME_WIDTH * GAME_HEIGHT)].surroundedBombs = -1;
+			i++;
+		}
+	}
 }
 
 void Game::StartUpdate() {

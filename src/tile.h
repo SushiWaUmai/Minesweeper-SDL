@@ -17,9 +17,9 @@ public:
 	inline void Expose() { isExposed = true; }
 	inline void Flag() { isFlagged = true; }
 
+	int surroundedBombs = 0;
 private:
 	SDL_Rect dst;
-	int surroundedBombs = 0;
 	bool isExposed = false;
 	bool isFlagged = false;
 };

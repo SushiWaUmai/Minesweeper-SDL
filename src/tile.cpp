@@ -18,6 +18,7 @@ void Tile::Init(SDL_Renderer* _renderer)
 	}
 
 	hiddenTexture = LoadTexture("res/hidden.bmp", _renderer);
+	bombTexture = LoadTexture("res/bomb.bmp", _renderer);
 }
 
 Tile::Tile(int x, int y) {
@@ -33,6 +34,7 @@ void Tile::Render(SDL_Renderer* _renderer) {
 			SDL_RenderCopy(_renderer, tileTextures[surroundedBombs], NULL, &dst);
 		}
 		else {
+			SDL_RenderCopy(_renderer, bombTexture, NULL, &dst);
 		}
 	}
 	else {
