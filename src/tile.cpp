@@ -4,15 +4,15 @@
 #include "game.h"
 #include <sstream>
 
-SDL_Texture* Tile::tileTextures[8];
+SDL_Texture* Tile::tileTextures[9];
 SDL_Texture* Tile::hiddenTexture;
 SDL_Texture* Tile::bombTexture;
 
 void Tile::Init(SDL_Renderer* _renderer)
 {
-	for (uint32_t i = 0; i < 8; i++) {
+	for (uint32_t i = 0; i < 9; i++) {
 		std::stringstream ss;
-		ss << "res/tile" << i + 1 << ".bmp";
+		ss << "res/tile" << i << ".bmp";
 
 		tileTextures[i] = LoadTexture(ss.str().c_str(), _renderer);
 	}
@@ -39,6 +39,17 @@ void Tile::Render(SDL_Renderer* _renderer) {
 	}
 	else {
 		SDL_RenderCopy(_renderer, hiddenTexture, NULL, &dst);
+	}
+}
+
+void Tile::Expose() {
+	if (!isExposed) {
+		isExposed = true;
+		if (surroundedBombs == 0) {
+			for (Tile* const tile : surroundedTiles) {
+				tile->Expose();
+			}
+		}
 	}
 }
 

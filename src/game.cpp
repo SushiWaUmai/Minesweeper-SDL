@@ -27,11 +27,32 @@ void Game::StartGame() {
 	}
 
 	srand(time(NULL));
-	for(int i = 0, j = 0; i < 10; j++) {
+	for(int i = 0, j = 0; i < GAME_BOMBS; j++) {
 		float val = ((float)rand() / (RAND_MAX));
-		if (val < 0.5) {
+		if (val < 1.0f / (GAME_WIDTH * GAME_HEIGHT)) {
 			tiles[j % (GAME_WIDTH * GAME_HEIGHT)].surroundedBombs = -1;
 			i++;
+		}
+	}
+
+	for (int y = 0; y < GAME_HEIGHT; y++) {
+		for (int x = 0; x < GAME_WIDTH; x++) {
+			if (tiles[y * GAME_HEIGHT + x].surroundedBombs == -1)
+				continue;
+
+			int bombs = 0;
+			for (int dx = x - 1; dx <= x + 1; dx++) {
+				for (int dy = y - 1; dy <= y + 1; dy++) {
+					if (dx >= 0 && dx < GAME_WIDTH && dy >= 0 && dy < GAME_HEIGHT) {
+						if (dx != x || dy != y) {
+							if (tiles[dy * GAME_HEIGHT + dx].surroundedBombs == -1)
+								bombs++;
+							tiles[y * GAME_HEIGHT + x].surroundedTiles.push_front(&tiles[dy * GAME_HEIGHT + dx]);
+						}
+					}
+				}
+			}
+			tiles[y * GAME_HEIGHT + x].surroundedBombs = bombs;
 		}
 	}
 }

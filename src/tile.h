@@ -2,11 +2,12 @@
 #include "SDL.h"
 #include "renderable.h"
 #include "clickable.h"
+#include <forward_list>
 
 class Tile : public Renderable, public Clickable {
 public:
 	static void Init(SDL_Renderer* _renderer);
-	static SDL_Texture* tileTextures[8];
+	static SDL_Texture* tileTextures[9];
 	static SDL_Texture* hiddenTexture;
 	static SDL_Texture* bombTexture;
 
@@ -14,9 +15,10 @@ public:
 	Tile(int x, int y);
 	void Render(SDL_Renderer* _renderer) override;
 	void Handle(SDL_MouseButtonEvent _mouseEvent) override;
-	inline void Expose() { isExposed = true; }
+	void Expose();
 	inline void Flag() { isFlagged = true; }
 
+	std::forward_list<Tile*> surroundedTiles;
 	int surroundedBombs = 0;
 private:
 	SDL_Rect dst;
