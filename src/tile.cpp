@@ -7,6 +7,7 @@
 SDL_Texture* Tile::tileTextures[9];
 SDL_Texture* Tile::hiddenTexture;
 SDL_Texture* Tile::bombTexture;
+SDL_Texture* Tile::flagTexture;
 
 void Tile::Init(SDL_Renderer* _renderer)
 {
@@ -19,6 +20,7 @@ void Tile::Init(SDL_Renderer* _renderer)
 
 	hiddenTexture = LoadTexture("res/hidden.bmp", _renderer);
 	bombTexture = LoadTexture("res/bomb.bmp", _renderer);
+	flagTexture = LoadTexture("res/flag.bmp", _renderer);
 }
 
 Tile::Tile(int x, int y) {
@@ -38,7 +40,12 @@ void Tile::Render(SDL_Renderer* _renderer) {
 		}
 	}
 	else {
-		SDL_RenderCopy(_renderer, hiddenTexture, NULL, &dst);
+		if (isFlagged) {
+			SDL_RenderCopy(_renderer, flagTexture, NULL, &dst);
+		}
+		else {
+			SDL_RenderCopy(_renderer, hiddenTexture, NULL, &dst);
+		}
 	}
 }
 
@@ -54,10 +61,15 @@ void Tile::Expose() {
 }
 
 void Tile::Handle(SDL_MouseButtonEvent _mouseEvent) {
-	if (_mouseEvent.button == SDL_BUTTON_LEFT) {
-		if (InRect(_mouseEvent.x, _mouseEvent.y, dst)) {
-			LOG_INFO("Tile Clicked: ({0}, {1})", dst.x / CELL_WIDTH, dst.y / CELL_HEIGHT);
-			Expose();
+	if (InRect(_mouseEvent.x, _mouseEvent.y, dst)) {
+		if (_mouseEvent.button == SDL_BUTTON_LEFT) {
+			if (!isFlagged) {
+				LOG_INFO("Tile Clicked: ({0}, {1})", dst.x / CELL_WIDTH, dst.y / CELL_HEIGHT);
+				Expose();
+			}
+		}
+		else if (_mouseEvent.button == SDL_BUTTON_RIGHT) {
+			isFlagged = !isFlagged;
 		}
 	}
 }

@@ -10,4 +10,3 @@ public:
 protected:
 	virtual void Handle(SDL_MouseButtonEvent _mouseEvent) = 0;
 };
-

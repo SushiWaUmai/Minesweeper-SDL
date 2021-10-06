@@ -7,7 +7,6 @@
 #include "clickable.h"
 
 void Game::StartGame() {
-
 	LOG_TRACE("Initializing SDL...");
 	int sdlInitResult = SDL_Init(SDL_INIT_EVERYTHING);
 	LOG_ASSERT(!sdlInitResult, "Failed to create SDL Window");
@@ -27,7 +26,7 @@ void Game::StartGame() {
 	}
 
 	srand(time(NULL));
-	for(int i = 0, j = 0; i < GAME_BOMBS; j++) {
+	for (int i = 0, j = 0; i < GAME_BOMBS; j++) {
 		float val = ((float)rand() / (RAND_MAX));
 		if (val < 1.0f / (GAME_WIDTH * GAME_HEIGHT)) {
 			tiles[j % (GAME_WIDTH * GAME_HEIGHT)].surroundedBombs = -1;
