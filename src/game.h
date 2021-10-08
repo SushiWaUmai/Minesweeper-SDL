@@ -1,7 +1,7 @@
 #pragma once
 #include <tuple>
 #include <functional>
-#include "SDL.h"
+#include <SDL.h>
 #include "tile.h"
 
 #define SCREEN_WIDTH 800

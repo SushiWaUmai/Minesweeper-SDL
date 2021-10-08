@@ -15,7 +15,7 @@ set(SRC
 	"src/renderable.cpp"
 	"src/clickable.cpp"
 	"src/clickable.h"
- "src/listable.cpp" "src/listable.h")
+ "src/listable.cpp" "src/listable.h" "src/assetloader.h" "src/assetloader.cpp")
 
 add_executable(Minesweeper ${SRC})
 

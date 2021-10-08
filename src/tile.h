@@ -1,12 +1,12 @@
 #pragma once
-#include "SDL.h"
+#include <SDL.h>
+#include <forward_list>
 #include "renderable.h"
 #include "clickable.h"
-#include <forward_list>
 
 class Tile : public Renderable, public Clickable {
 public:
-	static void Init(SDL_Renderer* _renderer);
+	static void Init();
 	static SDL_Texture* tileTextures[9];
 	static SDL_Texture* hiddenTexture;
 	static SDL_Texture* bombTexture;

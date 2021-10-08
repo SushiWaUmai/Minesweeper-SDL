@@ -1,6 +1,6 @@
 #pragma once
 #include <list>
-#include "SDL.h"
+#include <SDL.h>
 #include "listable.h"
 
 class Clickable : public Listable<Clickable> {

@@ -5,6 +5,7 @@
 #include "utils.h"
 #include "renderable.h"
 #include "clickable.h"
+#include "assetloader.h"
 
 void Game::StartGame() {
 	LOG_TRACE("Initializing SDL...");
@@ -19,13 +20,15 @@ void Game::StartGame() {
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 	LOG_ASSERT(renderer, "Failed to create SDL renderer");
 
+	AssetLoader::Init(renderer);
+
 	LOG_TRACE("Initializing Minesweeper Tiles...");
-	Tile::Init(renderer);
-	for (int i = 0; i < GAME_WIDTH * GAME_HEIGHT; i++) {
+	Tile::Init();
+	for (uint32_t i = 0; i < GAME_WIDTH * GAME_HEIGHT; i++) {
 		tiles[i] = Tile(i % GAME_WIDTH, i / GAME_WIDTH);
 	}
 
-	srand(time(NULL));
+	srand((uint32_t)time(NULL));
 	for (int i = 0, j = 0; i < GAME_BOMBS; j++) {
 		float val = ((float)rand() / (RAND_MAX));
 		if (val < 1.0f / (GAME_WIDTH * GAME_HEIGHT)) {
@@ -67,7 +70,14 @@ void Game::StartUpdate() {
 
 void Game::Terminate() {
 	LOG_INFO("Terminating Program...");
+	AssetLoader::Terminate();
+
+	SDL_DestroyRenderer(renderer);
+	LOG_TRACE("Renderer Destroyed");
+
 	SDL_DestroyWindow(window);
+	LOG_TRACE("Window Destroyed");
+
 	SDL_Quit();
 }
 
@@ -82,8 +92,10 @@ void Game::HandleEvents() {
 		switch (e.type) {
 		case SDL_QUIT:
 			isRunning = false;
+			break;
 		case SDL_MOUSEBUTTONDOWN:
 			Clickable::HandleAll(e.button);
+			break;
 		}
 	}
 }

@@ -2,6 +2,7 @@
 #include "log.h"
 #include "utils.h"
 #include "game.h"
+#include "assetloader.h"
 #include <sstream>
 
 SDL_Texture* Tile::tileTextures[9];
@@ -9,18 +10,18 @@ SDL_Texture* Tile::hiddenTexture;
 SDL_Texture* Tile::bombTexture;
 SDL_Texture* Tile::flagTexture;
 
-void Tile::Init(SDL_Renderer* _renderer)
+void Tile::Init()
 {
-	for (uint32_t i = 0; i < 9; i++) {
+	for (uint32_t i = 0; i <= 8; i++) {
 		std::stringstream ss;
 		ss << "res/tile" << i << ".bmp";
 
-		tileTextures[i] = LoadTexture(ss.str().c_str(), _renderer);
+		tileTextures[i] = AssetLoader::LoadTexture(ss.str().c_str());
 	}
 
-	hiddenTexture = LoadTexture("res/hidden.bmp", _renderer);
-	bombTexture = LoadTexture("res/bomb.bmp", _renderer);
-	flagTexture = LoadTexture("res/flag.bmp", _renderer);
+	hiddenTexture = AssetLoader::LoadTexture("res/hidden.bmp");
+	bombTexture = AssetLoader::LoadTexture("res/bomb.bmp");
+	flagTexture = AssetLoader::LoadTexture("res/flag.bmp");
 }
 
 Tile::Tile(int x, int y) {
