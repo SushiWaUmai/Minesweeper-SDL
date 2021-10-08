@@ -23,6 +23,7 @@ public:
 private:
 	void HandleEvents();
 	void Render();
+	void GameOver();
 
 	bool isRunning = true;
 	Tile tiles[GAME_WIDTH * GAME_HEIGHT];

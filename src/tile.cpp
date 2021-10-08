@@ -9,6 +9,7 @@ SDL_Texture* Tile::tileTextures[9];
 SDL_Texture* Tile::hiddenTexture;
 SDL_Texture* Tile::mineTexture;
 SDL_Texture* Tile::explodedMineTexture;
+SDL_Texture* Tile::wrongMineTexture;
 SDL_Texture* Tile::flagTexture;
 
 void Tile::Init()
@@ -22,16 +23,18 @@ void Tile::Init()
 
 	hiddenTexture = AssetLoader::LoadTexture("res/tile_hidden.bmp");
 	mineTexture = AssetLoader::LoadTexture("res/mine.bmp");
-	flagTexture = AssetLoader::LoadTexture("res/flag.bmp");
 	explodedMineTexture = AssetLoader::LoadTexture("res/mine_exploded.bmp");
+	wrongMineTexture = AssetLoader::LoadTexture("res/mine_wrong.bmp");
+	flagTexture = AssetLoader::LoadTexture("res/flag.bmp");
 }
 
-Tile::Tile(int x, int y) {
+Tile::Tile(int x, int y, const std::function<void()>& _gameOverCallback) {
 	dst.x = x * CELL_WIDTH;
 	dst.y = y * CELL_HEIGHT;
 	dst.w = CELL_WIDTH;
 	dst.h = CELL_HEIGHT;
 	sprite = hiddenTexture;
+	gameOverCallback = _gameOverCallback;
 }
 
 void Tile::Render(SDL_Renderer* _renderer) {
@@ -44,7 +47,7 @@ void Tile::Expose() {
 
 		if (IsMine()) {
 			sprite = explodedMineTexture;
-			LOG_INFO("Game Over");
+			gameOverCallback();
 		}
 		else {
 			sprite = tileTextures[surroundedBombs];
@@ -75,6 +78,17 @@ void Tile::Handle(SDL_MouseButtonEvent _mouseEvent) {
 			if (!isExposed) {
 				Flag();
 			}
+		}
+	}
+}
+
+void Tile::CheckTile() {
+	if (!isExposed) {
+		if (surroundedBombs == -1 && !isFlagged) {
+			sprite = mineTexture;
+		}
+		if (surroundedBombs != -1 && isFlagged) {
+			sprite = wrongMineTexture;
 		}
 	}
 }

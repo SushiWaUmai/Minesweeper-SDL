@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL.h>
 #include <forward_list>
+#include <functional>
 #include "renderable.h"
 #include "clickable.h"
 
@@ -11,14 +12,16 @@ public:
 	static SDL_Texture* hiddenTexture;
 	static SDL_Texture* mineTexture;
 	static SDL_Texture* explodedMineTexture;
+	static SDL_Texture* wrongMineTexture;
 	static SDL_Texture* Tile::flagTexture;
 
 	Tile() = default;
-	Tile(int x, int y);
+	Tile(int x, int y, const std::function<void()>& _gameOverCallback);
 	void Render(SDL_Renderer* _renderer) override;
 	void Handle(SDL_MouseButtonEvent _mouseEvent) override;
 	void Expose();
 	void Flag();
+	void CheckTile();
 	inline bool IsMine() { return surroundedBombs == -1; }
 
 	std::forward_list<Tile*> surroundedTiles;
@@ -28,4 +31,5 @@ private:
 	SDL_Texture* sprite;
 	bool isExposed = false;
 	bool isFlagged = false;
+	std::function<void(void)> gameOverCallback;
 };

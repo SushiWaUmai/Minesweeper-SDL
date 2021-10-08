@@ -25,7 +25,7 @@ void Game::StartGame() {
 	LOG_TRACE("Initializing Minesweeper Tiles...");
 	Tile::Init();
 	for (uint32_t i = 0; i < GAME_WIDTH * GAME_HEIGHT; i++) {
-		tiles[i] = Tile(i % GAME_WIDTH, i / GAME_WIDTH);
+		tiles[i] = Tile(i % GAME_WIDTH, i / GAME_WIDTH, [&]() { GameOver(); });
 	}
 
 	srand((uint32_t)time(NULL));
@@ -97,5 +97,12 @@ void Game::HandleEvents() {
 			Clickable::HandleAll(e.button);
 			break;
 		}
+	}
+}
+
+void Game::GameOver() {
+	LOG_INFO("Game Over");
+	for (Tile& t : tiles) {
+		t.CheckTile();
 	}
 }
