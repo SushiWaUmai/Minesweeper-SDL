@@ -11,8 +11,7 @@
 #ifdef _WIN32
 #define DEBUG_BREAK() __debugbreak()
 #else
-#include <signal.h>
-#define raise(SIGTRAP)
+#define DEBUG_BREAK() __builtin_trap()
 #endif
 
 #define LOG_ASSERT(check, msg)	{ if(!check) { LOG_ERROR("Assertion Failed: {0}", msg); DEBUG_BREAK(); } }
@@ -25,4 +24,3 @@
 #define LOG_LEVEL_CRITICAL spdlog::level::critical
 
 #define LOG_SET_LEVEL(level) spdlog::set_level(level)
-

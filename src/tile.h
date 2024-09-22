@@ -13,7 +13,7 @@ public:
 	static SDL_Texture* mineTexture;
 	static SDL_Texture* explodedMineTexture;
 	static SDL_Texture* wrongMineTexture;
-	static SDL_Texture* Tile::flagTexture;
+	static SDL_Texture* flagTexture;
 
 	Tile() = default;
 	Tile(int x, int y, const std::function<void()>& _gameOverCallback);
