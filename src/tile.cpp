@@ -16,16 +16,16 @@ void Tile::Init()
 {
 	for (uint32_t i = 0; i <= 8; i++) {
 		std::stringstream ss;
-		ss << "res/tile" << i << ".bmp";
+		ss << "./res/tile" << i << ".bmp";
 
 		tileTextures[i] = AssetLoader::LoadTexture(ss.str().c_str());
 	}
 
-	hiddenTexture = AssetLoader::LoadTexture("res/tile_hidden.bmp");
-	mineTexture = AssetLoader::LoadTexture("res/mine.bmp");
-	explodedMineTexture = AssetLoader::LoadTexture("res/mine_exploded.bmp");
-	wrongMineTexture = AssetLoader::LoadTexture("res/mine_wrong.bmp");
-	flagTexture = AssetLoader::LoadTexture("res/flag.bmp");
+	hiddenTexture = AssetLoader::LoadTexture("./res/tile_hidden.bmp");
+	mineTexture = AssetLoader::LoadTexture("./res/mine.bmp");
+	explodedMineTexture = AssetLoader::LoadTexture("./res/mine_exploded.bmp");
+	wrongMineTexture = AssetLoader::LoadTexture("./res/mine_wrong.bmp");
+	flagTexture = AssetLoader::LoadTexture("./res/flag.bmp");
 }
 
 Tile::Tile(int x, int y, const std::function<void()>& _gameOverCallback) {

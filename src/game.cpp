@@ -1,3 +1,8 @@
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
+#include <cstdlib>
 #include <iostream>
 #include "game.h"
 #include "log.h"
@@ -7,10 +12,10 @@
 #include "clickable.h"
 #include "assetloader.h"
 
-void Game::StartGame() {
+void Game::Init() {
 	LOG_TRACE("Initializing SDL...");
-	int sdlInitResult = SDL_Init(SDL_INIT_EVERYTHING);
-	LOG_ASSERT(!sdlInitResult, "Failed to create SDL Window");
+	int sdlInitResult = SDL_Init(SDL_INIT_VIDEO);
+	LOG_ASSERT(!sdlInitResult, "Failed to initialize SDL Window");
 
 	LOG_TRACE("Creating SDL Window...");
 	window = SDL_CreateWindow("Minesweeper", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
@@ -59,13 +64,33 @@ void Game::StartGame() {
 	}
 }
 
-void Game::StartUpdate() {
+void Game::Run() {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	Init();
 
-	while (isRunning) {
-		HandleEvents();
-		Render();
+    #ifdef __EMSCRIPTEN__
+    emscripten_set_main_loop_arg([](void* arg) {
+        static_cast<Game*>(arg)->Update();
+    }, this, 0, 1);
+    #else
+    while (true) {
+       	Update();
 	}
+    #endif
+}
+
+void Game::Update() {
+    if (!isRunning) {
+        Terminate();
+        #ifdef __EMSCRIPTEN__
+        emscripten_cancel_main_loop();
+        #else
+        std::exit(EXIT_SUCCESS);
+        #endif
+    }
+
+    HandleEvents();
+    Render();
 }
 
 void Game::Terminate() {

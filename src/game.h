@@ -16,11 +16,12 @@
 
 class Game {
 public:
-	void StartGame();
-	void StartUpdate();
-	void Terminate();
+	void Run();
 
 private:
+    void Init();
+	void Terminate();
+    void Update();
 	void HandleEvents();
 	void Render();
 	void GameOver();
